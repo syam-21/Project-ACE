@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Find Quizzes by Course & Criteria</title>
+  <style>
+    /* General page styling */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+    }
+
+    h2, h3 {
+      text-align: center;
+      color: #333;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+    }
+
+    /* Form styling */
+    form {
+      margin: 0 auto 30px;
+      max-width: 700px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+    form .form-group {
+      flex: 1 1 45%;
+      margin-bottom: 15px;
+    }
+    form label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    form select,
+    form input[type="number"],
+    form input[type="text"] {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+    form button {
+      padding: 10px 20px;
+      background-color: #007BFF;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      flex: 1 1 100%;
+      margin-top: 10px;
+    }
+    form button:hover {
+      background-color: #0056b3;
+    }
+
+    /* Message styling */
+    .message {
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    /* Table styling */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      text-align: left;
+      word-wrap: break-word;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    tr:nth-child(even) {
+      background-color: #fafafa;
+    }
+    tr:hover {
+      background-color: #f1f1f1;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 600px) {
+      form .form-group {
+        flex: 1 1 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Find Quizzes by Course & Criteria</h2>
+    <form method="POST">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="course_code">Course:</label>
+        <select name="course_code" id="course_code">
+          <option value="">-- Select Course --</option>
+          {% for code in courses %}
+            <option value="{{ code }}" {% if code == selected_course %}selected{% endif %}>{{ code }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="difficulty">Difficulty:</label>
+        <select name="difficulty" id="difficulty">
+          <option value="">-- Any --</option>
+          <option value="easy" {% if selected_difficulty == "easy" %}selected{% endif %}>Easy</option>
+          <option value="medium" {% if selected_difficulty == "medium" %}selected{% endif %}>Medium</option>
+          <option value="hard" {% if selected_difficulty == "hard" %}selected{% endif %}>Hard</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="time_limit">Max Time (min):</label>
+        <input type="number" name="time_limit" id="time_limit" value="{{ selected_time }}" placeholder="Enter max time">
+      </div>
+      <div class="form-group">
+        <label for="num_questions">Number of Questions:</label>
+        <input type="number" name="num_questions" id="num_questions" value="{{ selected_num }}" placeholder="Enter question count">
+      </div>
+      <button type="submit" name="filter_submit">Search</button>
+    </form>
+
+    {% if message %}
+      <p class="message" style="color:{{ 'red' if quizzes|length == 0 else 'green' }};">{{ message }}</p>
+    {% endif %}
+
+    {% if quizzes %}
+      <h3>Available Quizzes</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Course</th>
+            <th>Quiz Title</th>
+            <th>Teacher</th>
+            <th>Time Limit</th>
+            <th># Questions</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for quiz_id, title, time_limit, num_questions, teacher_name, course_name in quizzes %}
+            <tr>
+              <td>{{ course_name }}</td>
+              <td>{{ title }}</td>
+              <td>{{ teacher_name }}</td>
+              <td>{{ time_limit }} min</td>
+              <td>{{ num_questions }}</td>
+              <td>
+                <a href="/student/take_quiz/{{ quiz_id }}/" class="btn btn-success">Take Quiz</a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% endif %}
+  </div>
+</body>
+</html>

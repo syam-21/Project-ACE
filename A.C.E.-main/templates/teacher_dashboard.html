@@ -1,0 +1,3 @@
+{% for quiz in quizzes %}
+    <a href="{% url 'student_number' quiz_id=quiz.0 %}" class="button">See Student Numbers for {{ quiz.1 }}</a>
+{% endfor %}

@@ -1,0 +1,24 @@
+<h3>Student Scores for Quiz {{ quiz_id }}</h3>
+
+<table>
+    <thead>
+        <tr>
+            <th>Student Name</th>
+            <th>Score</th>
+            <th>Submitted At</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for score in scores %}
+            <tr>
+                <td>{{ score.1 }}</td>
+                <td>{{ score.0 }}</td>
+                <td>{{ score.2 }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if not scores %}
+    <p>No student scores found for this quiz.</p>
+{% endif %}

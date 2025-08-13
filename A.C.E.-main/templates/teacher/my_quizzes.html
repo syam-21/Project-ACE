@@ -1,0 +1,27 @@
+<!-- teacher/my_quizzes.html -->
+<h2>My Quizzes</h2>
+<form method="POST">
+    {% csrf_token %}
+    <label>Enter your User ID or Name:</label>
+    <input type="text" name="teacher_identifier">
+    <button type="submit">View Quizzes</button>
+</form>
+
+{% if error %}
+  <p style="color:red;">{{ error }}</p>
+{% endif %}
+{% if message %}
+  <p>{{ message }}</p>
+{% endif %}
+
+{% if quizzes %}
+  <table>
+    <tr><th>Quiz Title</th><th>Students Taken</th></tr>
+    {% for quiz_id, quiz_title, taken_count in quizzes %}
+      <tr>
+        <td><a href="/teacher/quiz_results/{{ quiz_id }}/">{{ quiz_title }}</a></td>
+        <td>{{ taken_count }}</td>
+      </tr>
+    {% endfor %}
+  </table>
+{% endif %}

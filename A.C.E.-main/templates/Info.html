@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+      <html lang="en">
+      <head>
+          <meta charset="UTF-8">
+          <title>User Information</title>
+          <style>
+              body {
+                  font-family: Arial, sans-serif;
+                  background-color: #f4f4f4;
+                  margin: 0;
+                  padding: 0;
+                  display: flex;
+                  height: 100vh;
+              }
+              .sidebar {
+                  height: 100%;
+                  width: 250px;
+                  position: fixed;
+                  top: 0;
+                  left: 0;
+                  background-color: #111;
+                  padding-top: 20px;
+                  display: none;
+              }
+              .sidebar a {
+                  padding: 10px 15px;
+                  text-decoration: none;
+                  font-size: 18px;
+                  color: #818181;
+                  display: block;
+              }
+              .sidebar a:hover {
+                  color: #f1f1f1;
+              }
+              .main {
+                  margin-left: 0;
+                  padding: 20px;
+                  flex-grow: 1;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  flex-direction: column;
+              }
+              .container {
+                  text-align: center;
+                  background-color: #fff;
+                  padding: 50px;
+                  border-radius: 10px;
+                  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                  max-width: 500px;
+                  margin: 20px;
+              }
+              h2 {
+                  color: #333;
+                  margin-bottom: 30px;
+              }
+              .info-item {
+                  margin-bottom: 20px;
+                  text-align: left;
+              }
+              .info-label {
+                  font-weight: bold;
+                  color: #666;
+                  margin-bottom: 5px;
+                  display: block;
+              }
+              .info-value {
+                  font-size: 18px;
+                  color: #333;
+                  padding: 10px;
+                  background-color: #f9f9f9;
+                  border-radius: 5px;
+                  border: 1px solid #eee;
+              }
+              .toggle-btn {
+                  font-size: 20px;
+                  cursor: pointer;
+                  position: fixed;
+                  top: 20px;
+                  left: 20px;
+                  color: #111;
+              }
+              .button {
+                  display: inline-block;
+                  padding: 10px 20px;
+                  font-size: 16px;
+                  color: #fff;
+                  background-color: #007BFF;
+                  border: none;
+                  border-radius: 5px;
+                  text-decoration: none;
+                  cursor: pointer;
+                  margin-top: 20px;
+              }
+              .button:hover {
+                  background-color: #0056b3;
+              }
+          </style>
+      </head>
+      <body>
+          <div class="sidebar" id="sidebar">
+              <a href="/Login/">Login</a>
+              {% if user_role == 'student' %}
+              <a href="/student/">Student Dashboard</a>
+              {% elif user_role == 'teacher' %}
+              <a href="/teacher/">Teacher Dashboard</a>
+              {% elif user_role == 'admin' %}
+              <a href="/admin/">Admin Dashboard</a>
+              {% endif %}
+          </div>
+          <div class="main">
+              <span class="toggle-btn" onclick="toggleSidebar()">&#9776; Menu</span>
+              <div class="container">
+                  <h2>User Information</h2>
+
+                  <div class="info-item">
+                      <span class="info-label">Username:</span>
+                      <div class="info-value">{{ username }}</div>
+                  </div>
+
+                  <div class="info-item">
+                      <span class="info-label">Email:</span>
+                      <div class="info-value">{{ email }}</div>
+                  </div>
+
+                  <div class="info-item">
+                      <span class="info-label">Role:</span>
+                      <div class="info-value">{{ role }}</div>
+                  </div>
+
+                  {% if institute %}
+                  <div class="info-item">
+                      <span class="info-label">Institute:</span>
+                      <div class="info-value">{{ institute }}</div>
+                  </div>
+                  {% endif %}
+
+                  <div class="info-item">
+                      <span class="info-label">Last Login:</span>
+                      <div class="info-value">
+                          {% if last_login %}
+                              {{ last_login }}
+                          {% else %}
+                              Never logged in before
+                          {% endif %}
+                      </div>
+                  </div>
+
+                  <a href="javascript:history.back()" class="button">Back</a>
+              </div>
+          </div>
+
+          <script>
+              function toggleSidebar() {
+                  var sidebar = document.getElementById('sidebar');
+                  if (sidebar.style.display === 'block') {
+                      sidebar.style.display = 'none';
+                  } else {
+                      sidebar.style.display = 'block';
+                  }
+              }
+          </script>
+      </body>
+      </html>

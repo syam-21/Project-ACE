@@ -1,0 +1,20 @@
+<form method="POST">
+    {% csrf_token %}
+    <label for="course_code">Course Code:</label>
+    <input type="text" name="course_code" required>
+
+    <label for="difficulty">Difficulty Level:</label>
+    <select name="difficulty" required>
+        <option value="easy">Easy</option>
+        <option value="medium">Medium</option>
+        <option value="hard">Hard</option>
+    </select>
+
+    <label for="time_limit">Time Limit (in minutes):</label>
+    <input type="number" name="time_limit" required>
+
+    <label for="num_of_questions">Number of Questions:</label>
+    <input type="number" name="num_of_questions" required>
+
+    <button type="submit">Search Quizzes</button>
+</form>

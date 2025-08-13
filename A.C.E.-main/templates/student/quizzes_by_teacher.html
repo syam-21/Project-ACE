@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Find Quizzes by Teacher</title>
+  <style>
+    /* Overall Page Style */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+
+    /* Centered Container */
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    /* Header Styles */
+    h2 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    h3 {
+      color: #444;
+      margin-top: 30px;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    /* Form Styles */
+    form {
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    form label {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    form input[type="text"] {
+      width: 80%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    form button {
+      padding: 10px 20px;
+      background-color: #007BFF;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    form button:hover {
+      background-color: #0056b3;
+    }
+
+    /* Table Styles */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    table th, table td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+      word-wrap: break-word;
+    }
+
+    table th {
+      background-color: #f2f2f2;
+    }
+
+    table tr:nth-child(even) {
+      background-color: #fafafa;
+    }
+
+    table tr:hover {
+      background-color: #f1f1f1;
+    }
+
+    /* Action Button in Table */
+    .action-btn {
+      padding: 6px 12px;
+      background-color: #28a745;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .action-btn:hover {
+      background-color: #218838;
+    }
+
+    /* Error Message Style */
+    .error {
+      color: red;
+      text-align: center;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Find Quizzes by Teacher</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <label for="teacher_identifier">Teacher Name or ID:</label>
+        <input type="text" name="teacher_identifier" id="teacher_identifier" value="{{ teacher_input }}" placeholder="Enter teacher name or ID">
+        <button type="submit">Search</button>
+    </form>
+
+    {% if error %}
+      <p class="error">{{ error }}</p>
+    {% endif %}
+
+    {% if quizzes %}
+      <h3>Quizzes by Teacher {{ teacher_input }}</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Time Limit</th>
+            <th>Questions</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for quiz_id, quiz_title, time_limit, num_questions in quizzes %}
+          <tr>
+            <td>{{ quiz_title }}</td>
+            <td>{{ time_limit }} minutes</td>
+            <td>{{ num_questions }} questions</td>
+            <td>
+              <a href="/student/take_quiz/{{ quiz_id }}/" class="action-btn">Take Quiz</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% endif %}
+  </div>
+</body>
+</html>

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Find Quizzes by Course & Criteria</title>
+  <style>
+    /* Reset styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      padding: 20px;
+      margin-top: 60px; /* to adjust for the fixed navbar */
+    }
+
+    .navbar {
+      background-color: #111;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      box-sizing: border-box;
+      z-index: 10; /* Ensure the navbar stays on top */
+    }
+
+    .navbar-left {
+      font-size: 18px;
+      color: #fff;
+      font-weight: bold;
+    }
+
+    .navbar-right {
+      display: flex;
+      align-items: center;
+    }
+
+    .navbar a {
+      color: #818181;
+      text-decoration: none;
+      margin-left: 20px;
+      font-size: 16px;
+    }
+
+    .navbar a:hover {
+      color: #f1f1f1;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h2, h3 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    /* Form styles */
+    form {
+      margin-bottom: 30px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    form .form-group {
+      flex: 1 1 45%;
+      margin-bottom: 15px;
+    }
+
+    form label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    form select,
+    form input[type="number"],
+    form input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    form button {
+      padding: 10px 20px;
+      background-color: #007BFF;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      flex: 1 1 100%;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+
+    form button:hover {
+      background-color: #0056b3;
+    }
+
+    /* Message styles */
+    .message {
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    /* Table styles */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    table th, table td {
+      padding: 12px;
+      border: 1px solid #ddd;
+      text-align: left;
+      word-wrap: break-word;
+    }
+
+    table th {
+      background-color: #f2f2f2;
+    }
+
+    table tr:nth-child(even) {
+      background-color: #fafafa;
+    }
+
+    table tr:hover {
+      background-color: #f1f1f1;
+    }
+
+    .action-btn {
+      padding: 8px 12px;
+      background-color: #28a745;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .action-btn:hover {
+      background-color: #218838;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      form .form-group {
+        flex: 1 1 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="navbar-left">
+      <a href="/Info/">Info</a>
+      <a href="/Logout/">Logout</a>
+    </div>
+    <div class="navbar-right">
+      Student Dashboard
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container">
+    <h2>Find Quizzes by Course & Criteria</h2>
+    <form method="POST">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="course_code">Course:</label>
+        <select name="course_code" id="course_code">
+          <option value="">-- Select Course --</option>
+          {% for code in courses %}
+            <option value="{{ code }}" {% if code == selected_course %}selected{% endif %}>{{ code }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="difficulty">Difficulty:</label>
+        <select name="difficulty" id="difficulty">
+          <option value="">-- Any --</option>
+          <option value="easy" {% if selected_difficulty == "easy" %}selected{% endif %}>Easy</option>
+          <option value="medium" {% if selected_difficulty == "medium" %}selected{% endif %}>Medium</option>
+          <option value="hard" {% if selected_difficulty == "hard" %}selected{% endif %}>Hard</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="time_limit">Max Time (min):</label>
+        <input type="number" name="time_limit" id="time_limit" value="{{ selected_time }}" placeholder="Enter maximum time">
+      </div>
+      <div class="form-group">
+        <label for="num_questions">Number of Questions:</label>
+        <input type="number" name="num_questions" id="num_questions" value="{{ selected_num }}" placeholder="Enter number of questions">
+      </div>
+      <button type="submit" name="filter_submit">Search</button>
+    </form>
+
+    {% if message %}
+      {% if filtered_quizzes %}
+        <h3>{% if filter_performed %}Filtered Quizzes{% else %}All Available Quizzes{% endif %}</h3>
+        <table class="table table-bordered table-hover">
+          <thead>
+            <tr>
+              <th>Course</th>
+              <th>Quiz Title</th>
+              <th>Teacher</th>
+              <th>Time Limit</th>
+              <th># Questions</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for quiz_id, title, time_limit, num_questions, teacher_name, course_name in filtered_quizzes %}
+              <tr>
+                <td>{{ course_name }}</td>
+                <td>{{ title }}</td>
+                <td>{{ teacher_name }}</td>
+                <td>{{ time_limit }} min</td>
+                <td>{{ num_questions }}</td>
+                <td>
+                  {% if quiz_id in taken_ids %}
+                    <a href="/student/quiz/{{ quiz_id }}/results" class="action-btn">View</a>
+                  {% else %}
+                    <a href="/student/take_quiz/{{ quiz_id }}" class="action-btn">Take Quiz</a>
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% elif filter_performed %}
+        <p class="message" style="color: red;"><em>No quizzes found matching the selected criteria.</em></p>
+      {% endif %}
+    {% endif %}
+  </div>
+</body>
+</html>

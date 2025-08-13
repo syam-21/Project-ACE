@@ -1,0 +1,6 @@
+<form method="POST">
+    {% csrf_token %}
+    <label for="teacher_id">Enter Teacher's UserID:</label>
+    <input type="text" name="teacher_id" required>
+    <button type="submit">View Scores</button>
+</form>

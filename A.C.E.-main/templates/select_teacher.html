@@ -1,0 +1,14 @@
+<form method="POST">
+    {% csrf_token %}
+    <label for="teacher_id">Enter Teacher's UserID:</label>
+    <input type="text" name="teacher_id" placeholder="Teacher's UserID">
+    <br>
+    <label for="teacher_name">Or Enter Teacher's Name:</label>
+    <input type="text" name="teacher_name" placeholder="Teacher's Name">
+    <br>
+    <button type="submit">Get Quizzes</button>
+</form>
+
+{% if error %}
+    <p style="color: red;">{{ error }}</p>
+{% endif %}

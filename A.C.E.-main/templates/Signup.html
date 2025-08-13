@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+          <html lang="en">
+          <head>
+              <meta charset="UTF-8">
+              <title>Signup - HaLUm Store</title>
+              <style>
+                  body {
+                      font-family: Arial, sans-serif;
+                      background-color: #f4f4f4;
+                      margin: 0;
+                      padding: 0;
+                      display: flex;
+                      justify-content: center;
+                      align-items: center;
+                      height: 100vh;
+                  }
+                  .container {
+                      text-align: center;
+                      background-color: #fff;
+                      padding: 50px;
+                      border-radius: 10px;
+                      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                      max-width: 600px;
+                      margin: 20px;
+                  }
+                  h2 {
+                      color: #333;
+                  }
+                  label {
+                      display: block;
+                      margin: 10px 0 5px;
+                      color: #666;
+                  }
+                  input, select {
+                      width: 100%;
+                      padding: 10px;
+                      margin: 5px 0 20px;
+                      border: 1px solid #ccc;
+                      border-radius: 5px;
+                  }
+                  button {
+                      display: inline-block;
+                      padding: 10px 20px;
+                      font-size: 16px;
+                      color: #fff;
+                      background-color: #007BFF;
+                      border: none;
+                      border-radius: 5px;
+                      text-decoration: none;
+                      cursor: pointer;
+                  }
+                  button:hover {
+                      background-color: #0056b3;
+                  }
+              </style>
+          </head>
+          <body>
+              <div class="container">
+                  <h2>Signup</h2>
+                  <form action="/Signup/" method="post">
+                      {% csrf_token %}
+                      <label for="username">Username:</label>
+                      <input type="text" id="username" name="username" required>
+
+                      <label for="email">Email:</label>
+                      <input type="email" id="email" name="email" required>
+
+                      <label for="role">Role:</label>
+                      <select id="role" name="role" required>
+                          <option value="student">Student</option>
+                          <option value="teacher">Teacher</option>
+                          <option value="admin">Admin</option>
+                      </select>
+
+                      <div id="password-section">
+                          <label for="password">Password:</label>
+                          <input type="password" id="password" name="password" required>
+                      </div>
+
+                      <div id="passkey-section" style="display: none;">
+                          <label for="passkey">Passkey:</label>
+                          <input type="password" id="passkey" name="passkey">
+                          <span id="passkey-error" style="color: red; display: none;">Invalid passkey</span>
+                      </div>
+
+                      <button type="submit">Signup</button>
+                  </form>
+              </div>
+
+              <script>
+                  document.getElementById('role').addEventListener('change', function() {
+                      var role = this.value;
+                      var passkeySection = document.getElementById('passkey-section');
+                      var passkeyInput = document.getElementById('passkey');
+                      var passkeyError = document.getElementById('passkey-error');
+
+                      if (role === 'student') {
+                          passkeySection.style.display = 'none';
+                          passkeyInput.required = false;
+                      } else {
+                          passkeySection.style.display = 'block';
+                          passkeyInput.required = true;
+                      }
+                  });
+
+                  document.querySelector('form').addEventListener('submit', function(event) {
+                      var role = document.getElementById('role').value;
+                      var passkey = document.getElementById('passkey').value;
+                      var passkeyError = document.getElementById('passkey-error');
+
+                      if ((role === 'admin' && passkey !== 'adminpasskey') || (role === 'teacher' && passkey !== 'teacherpasskey')) {
+                          event.preventDefault();
+                          passkeyError.style.display = 'block';
+                      } else {
+                          passkeyError.style.display = 'none';
+                      }
+                  });
+              </script>
+          </body>
+          </html>

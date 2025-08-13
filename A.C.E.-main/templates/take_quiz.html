@@ -1,0 +1,16 @@
+<form method="POST">
+    {% csrf_token %}
+    <h3>Quiz: {{ quiz_title }} - Time Limit: {{ time_limit }} minutes</h3>
+
+    {% for question in questions %}
+        <div>
+            <p>{{ question.0 }}</p>
+            <input type="radio" name="question_{{ forloop.counter }}" value="1">{{ question.1 }}
+            <input type="radio" name="question_{{ forloop.counter }}" value="2">{{ question.2 }}
+            <input type="radio" name="question_{{ forloop.counter }}" value="3">{{ question.3 }}
+            <input type="radio" name="question_{{ forloop.counter }}" value="4">{{ question.4 }}
+        </div>
+    {% endfor %}
+
+    <button type="submit">Submit</button>
+</form>

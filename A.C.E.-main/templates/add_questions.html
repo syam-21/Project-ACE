@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Quiz Questions</title>
+    <style>
+        /* General styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        p {
+            font-size: 1.1em;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* Form styling */
+        form {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        fieldset {
+            border: 2px solid #ddd;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        legend {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #444;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        select {
+            cursor: pointer;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Error message styling */
+        .error {
+            color: red;
+            font-weight: bold;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        /* Responsive styling */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.5em;
+            }
+
+            form {
+                padding: 20px;
+            }
+
+            button {
+                width: 100%;
+                font-size: 18px;
+            }
+
+            input[type="text"],
+            select,
+            textarea {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Add Questions for "{{ quiz_title }}"</h1>
+    <p>Please enter all <strong>{{ total_questions }}</strong> questions for this quiz:</p>
+
+    {% if error %}
+      <p class="error">{{ error }}</p>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        {% for i in questions_range %}
+        <fieldset>
+            <legend>Question {{ i }}</legend>
+
+            <label for="question_text_{{ i }}">Question Text:</label>
+            <textarea name="question_text_{{ i }}" id="question_text_{{ i }}" rows="3" cols="60" required></textarea>
+
+            <label for="option1_{{ i }}">Option 1:</label>
+            <input type="text" name="option1_{{ i }}" id="option1_{{ i }}" required>
+
+            <label for="option2_{{ i }}">Option 2:</label>
+            <input type="text" name="option2_{{ i }}" id="option2_{{ i }}" required>
+
+            <label for="option3_{{ i }}">Option 3:</label>
+            <input type="text" name="option3_{{ i }}" id="option3_{{ i }}" required>
+
+            <label for="option4_{{ i }}">Option 4:</label>
+            <input type="text" name="option4_{{ i }}" id="option4_{{ i }}" required>
+
+            <label for="correct_answer_{{ i }}">Correct Option Number:</label>
+            <select name="correct_answer_{{ i }}" id="correct_answer_{{ i }}" required>
+                <option value="" disabled selected>Select the correct option</option>
+                <option value="1">1 (Option 1)</option>
+                <option value="2">2 (Option 2)</option>
+                <option value="3">3 (Option 3)</option>
+                <option value="4">4 (Option 4)</option>
+            </select>
+
+            <label for="difficulty_{{ i }}">Difficulty Level:</label>
+            <select name="difficulty_{{ i }}" id="difficulty_{{ i }}" required>
+                <option value="" disabled selected>Select difficulty</option>
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+            </select>
+        </fieldset>
+        {% endfor %}
+
+        <button type="submit">Submit Questions</button>
+    </form>
+</body>
+</html>

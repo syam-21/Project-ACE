@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+          <html lang="en">
+          <head>
+              <meta charset="UTF-8">
+              <title>Login - HaLUm Store</title>
+              <style>
+                  body {
+                      font-family: Arial, sans-serif;
+                      background-color: #f4f4f4;
+                      margin: 0;
+                      padding: 0;
+                      display: flex;
+                      justify-content: center;
+                      align-items: center;
+                      height: 100vh;
+                  }
+                  .container {
+                      text-align: center;
+                      background-color: #fff;
+                      padding: 50px;
+                      border-radius: 10px;
+                      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                      max-width: 400px;
+                      margin: 20px;
+                  }
+                  h2 {
+                      color: #333;
+                  }
+                  label {
+                      display: block;
+                      margin: 10px 0 5px;
+                      color: #666;
+                  }
+                  input {
+                      width: 100%;
+                      padding: 10px;
+                      margin: 5px 0 20px;
+                      border: 1px solid #ccc;
+                      border-radius: 5px;
+                  }
+                  button {
+                      display: inline-block;
+                      padding: 10px 20px;
+                      font-size: 16px;
+                      color: #fff;
+                      background-color: #007BFF;
+                      border: none;
+                      border-radius: 5px;
+                      text-decoration: none;
+                      cursor: pointer;
+                  }
+                  button:hover {
+                      background-color: #0056b3;
+                  }
+                  .error {
+                      color: red;
+                  }
+                  .signup-link {
+                      margin-top: 20px;
+                      display: block;
+                      color: #007BFF;
+                      text-decoration: none;
+                  }
+                  .signup-link:hover {
+                      text-decoration: underline;
+                  }
+              </style>
+          </head>
+          <body>
+              <div class="container">
+                  <h2>Login</h2>
+                  <form id="login-form" action="/Login/" method="post">
+                      {% csrf_token %}
+                      <label for="username">Username:</label>
+                      <input type="text" id="username" name="username" required>
+
+                      <label for="password">Password:</label>
+                      <input type="password" id="password" name="password" required>
+
+                      <button type="submit">Login</button>
+                      {% if error %}
+                          <p id="error-message" class="error">{{ error }}</p>
+                      {% endif %}
+                  </form>
+                  <a href="/Signup/" class="signup-link">Not registered? Create an account</a>
+              </div>
+          </body>
+          </html>

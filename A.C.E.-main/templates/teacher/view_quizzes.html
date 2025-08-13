@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            word-wrap: break-word;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        .back-link {
+            display: block;
+            margin-top: 20px;
+            color: #007BFF;
+            text-decoration: none;
+        }
+
+        /* Adjust column widths for better alignment */
+        th, td {
+            width: 16%; /* Setting default column width to 16% */
+        }
+
+        /* Adjust specific column widths */
+        th:nth-child(1), td:nth-child(1) {
+            width: 10%; /* ID column width */
+        }
+
+        th:nth-child(2), td:nth-child(2) {
+            width: 25%; /* Quiz Title column width */
+        }
+
+        th:nth-child(3), td:nth-child(3) {
+            width: 15%; /* Time Limit column width */
+        }
+
+        th:nth-child(4), td:nth-child(4) {
+            width: 15%; /* Questions column width */
+        }
+
+        th:nth-child(5), td:nth-child(5) {
+            width: 15%; /* Created By column width */
+        }
+
+        th:nth-child(6), td:nth-child(6) {
+            width: 20%; /* Action column width */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Quiz Results</h1>
+
+        {% if quizzes %}
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Quiz Title</th>
+                    <th>Time Limit</th>
+                    <th>Questions</th>
+                    <th>Created By</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for quiz in quizzes %}
+                <tr>
+                    <td>{{ quiz.0 }}</td>
+                    <td>{{ quiz.1 }}</td>
+                    <td>{{ quiz.2 }} min</td>
+                    <td>{{ quiz.3 }}</td>
+                    <td>{{ quiz.4 }}</td>
+                    <td>
+                        <a href="{% url 'view_quiz' quiz.0 %}">View Details</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No quizzes found matching your search criteria.</p>
+        {% endif %}
+
+        <a href="/teacher/see_quiz/" class="back-link">Back to Search</a>
+    </div>
+</body>
+</html>

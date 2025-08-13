@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>See Quizzes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .navbar {
+            background-color: #111;
+            overflow: hidden;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            box-sizing: border-box;
+        }
+        .navbar-left {
+            font-size: 20px;
+            color: #fff;
+            font-weight: bold;
+        }
+        .navbar-right {
+            display: flex;
+            align-items: center;
+        }
+        .navbar a {
+            color: #818181;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 18px;
+        }
+        .navbar a:hover {
+            color: #f1f1f1;
+        }
+        .main {
+            margin-top: 60px;
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .container {
+            text-align: center;
+            background-color: #fff;
+            padding: 50px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 20px;
+        }
+        h2 {
+            color: #333;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-top: 20px;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        select, input {
+            padding: 10px;
+            width: 100%;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <div class="navbar-left">Teacher Dashboard</div>
+    <div class="navbar-right">
+        <a href="/Info/">Info</a>
+        <a href="/Logout/">Logout</a>
+    </div>
+</div>
+
+<div class="main">
+    <div class="container">
+        <h2>Search and View Quizzes</h2>
+
+       <form method="POST" action="">
+    {% csrf_token %}
+    <!-- Teacher Name Filter -->
+    <label for="teacher_name">Teacher Name:</label>
+    <input type="text" name="teacher_name" id="teacher_name" placeholder="Enter teacher name">
+
+    <!-- Teacher ID Filter -->
+    <label for="teacher_id">Teacher ID:</label>
+    <input type="text" name="teacher_id" id="teacher_id" placeholder="Enter teacher ID">
+
+    <!-- Course Code Filter -->
+    <label for="course_code">Course Code:</label>
+    <input type="text" name="course_code" id="course_code" placeholder="Enter course code">
+
+    <button type="submit">Filter</button>
+</form>
+
+        <!-- Display Quizzes -->
+        {% if quizzes %}
+        <h3>Found Quizzes</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Quiz Title</th>
+                    <th>Teacher Name</th>
+                    <th>Time Limit</th>
+                    <th>Questions</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for quiz in quizzes %}
+                <tr>
+                    <td>{{ quiz.1 }}</td>  <!-- Quiz Title -->
+                    <td>{{ quiz.4 }}</td>  <!-- Teacher's Name -->
+                    <td>{{ quiz.3 }} minutes</td>  <!-- Time Limit -->
+                    <td>{{ quiz.2 }} questions</td>  <!-- Number of Questions -->
+                    <td>
+                        <a href="{% url 'view_quiz' quiz.0 %}" class="button">View Quiz</a>  <!-- Link to view the quiz -->
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+            <p>No quizzes found based on your filters.</p>
+        {% endif %}
+    </div>
+</div>
+
+</body>
+</html>

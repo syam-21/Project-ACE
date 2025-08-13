@@ -1,0 +1,22 @@
+<h3>Scores for Teacher ID: {{ teacher_id }}</h3>
+
+<table>
+    <thead>
+        <tr>
+            <th>Student Name</th>
+            <th>Score</th>
+            <th>Quiz Title</th>
+            <th>Submitted At</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for score in scores %}
+        <tr>
+            <td>{{ score.1 }}</td>
+            <td>{{ score.0 }}</td>
+            <td>{{ quizzes|get_quiz_title:score.2 }}</td>
+            <td>{{ score.2 }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

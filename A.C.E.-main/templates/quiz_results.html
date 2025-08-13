@@ -1,0 +1,7 @@
+<h3>Your Quiz Results</h3>
+
+{% if score %}
+    <p>Your score: {{ score }}</p>
+{% else %}
+    <p>{{ error }}</p>
+{% endif %}

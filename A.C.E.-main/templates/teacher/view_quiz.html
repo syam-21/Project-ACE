@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Quiz</title>
+    <style>
+        /* General styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .quiz-details {
+            margin-bottom: 30px;
+        }
+        .quiz-details p {
+            margin: 5px 0;
+            font-size: 16px;
+        }
+        .questions {
+            margin-top: 20px;
+        }
+        .question {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+        .question h2 {
+            font-size: 18px;
+            color: #007BFF;
+            margin-bottom: 10px;
+        }
+        .options {
+            margin-left: 20px;
+            margin-top: 10px;
+            list-style: none;
+            padding-left: 0;
+        }
+        .options li {
+            margin-bottom: 5px;
+        }
+        .correct {
+            color: green;
+            font-weight: bold;
+        }
+        .back-link {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+            color: #007BFF;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>{{ quiz.0 }}</h1>
+        <div class="quiz-details">
+            <p><strong>Time Limit:</strong> {{ quiz.1 }} min</p>
+            <p><strong>Number of Questions:</strong> {{ quiz.2 }}</p>
+            {% if quiz.3 %}
+            <p><strong>Created By:</strong> {{ quiz.3 }}</p>
+            {% endif %}
+        </div>
+
+        <div class="questions">
+            {% if questions %}
+                {% for question in questions %}
+                    <div class="question">
+                        <h2>Question {{ forloop.counter }}</h2>
+                        <p>{{ question.0 }}</p>
+                        <ul class="options">
+                            <li><strong>Option 1:</strong> {{ question.1 }}</li>
+                            <li><strong>Option 2:</strong> {{ question.2 }}</li>
+                            <li><strong>Option 3:</strong> {{ question.3 }}</li>
+                            <li><strong>Option 4:</strong> {{ question.4 }}</li>
+                        </ul>
+                        <p>Correct Answer: <span class="correct">{{ question.5 }}</span></p>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No questions found for this quiz.</p>
+            {% endif %}
+        </div>
+
+        <a href="/teacher/see_quiz/" class="back-link">Back to Quizzes</a>
+    </div>
+</body>
+</html>

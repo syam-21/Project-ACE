@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .navbar {
+            background-color: #111;
+            overflow: hidden;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            box-sizing: border-box;
+            z-index: 10;
+        }
+        .navbar-left {
+            font-size: 20px;
+            color: #fff;
+            font-weight: bold;
+        }
+        .navbar-right {
+            display: flex;
+            align-items: center;
+        }
+        .navbar a {
+            color: #818181;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 18px;
+        }
+        .navbar a:hover {
+            color: #f1f1f1;
+        }
+        .main {
+            margin-top: 60px;
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            text-align: center;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            margin: 20px auto;
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .button {
+            display: inline-block;
+            padding: 8px 16px;
+            font-size: 14px;
+            color: #fff;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .button.logout {
+            background-color: #dc3545;
+        }
+        .button.delete {
+            background-color: #dc3545;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+        .button.logout:hover, .button.delete:hover {
+            background-color: #bd2130;
+        }
+        /* Table styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        .actions {
+            text-align: center;
+        }
+        .confirmation-dialog {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+        .dialog-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 400px;
+        }
+        .dialog-buttons {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbar-left">Admin Dashboard</div>
+        <div class="navbar-right">
+            <a href="/Info/">Info</a>
+            <a href="/Logout/">Logout</a>
+        </div>
+    </div>
+
+    <div class="main">
+        <!-- User Management -->
+        <div class="container">
+            <h2>User Management</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user.0 }}</td>
+                        <td>{{ user.1 }}</td>
+                        <td>{{ user.2 }}</td>
+                        <td>{{ user.3 }}</td>
+                        <td>{{ user.5|yesno:"Active,Inactive" }}</td>
+                        <td class="actions">
+                            <button class="button delete" onclick="confirmDeleteUser({{ user.0 }}, '{{ user.1 }}')">Delete</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Course Management -->
+        <div class="container">
+            <h2>Course Management</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Course Code</th>
+                        <th>Course Name</th>
+                        <th>Description</th>
+                        <th>Faculty ID</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for course in courses %}
+                    <tr>
+                        <td>{{ course.0 }}</td>
+                        <td>{{ course.1 }}</td>
+                        <td>{{ course.2 }}</td>
+                        <td>{{ course.3 }}</td>
+                        <td>{{ course.4 }}</td>
+                        <td class="actions">
+                            <button class="button delete" onclick="confirmDeleteCourse({{ course.0 }}, '{{ course.2 }}')">Delete</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Quiz Management -->
+        <div class="container">
+            <h2>Quiz Management</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Quiz Title</th>
+                        <th>Course ID</th>
+                        <th>Faculty ID</th>
+                        <th>Time Limit</th>
+                        <th>Number of Questions</th>
+                        <th>Created At</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for quiz in quizzes %}
+                    <tr>
+                        <td>{{ quiz.0 }}</td>
+                        <td>{{ quiz.1 }}</td>
+                        <td>{{ quiz.2 }}</td>
+                        <td>{{ quiz.3 }}</td>
+                        <td>{{ quiz.4 }}</td>
+                        <td>{{ quiz.5 }}</td>
+                        <td>{{ quiz.6 }}</td>
+                        <td class="actions">
+                            <button class="button delete" onclick="confirmDeleteQuiz({{ quiz.0 }}, '{{ quiz.1 }}')">Delete</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if message %}
+        <div class="message" style="margin-top: 20px; color: green;">
+            {{ message }}
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Confirmation dialog for user deletion -->
+    <div class="confirmation-dialog" id="deleteUserConfirmation">
+        <div class="dialog-content">
+            <h3>Confirm Deletion</h3>
+            <p>Are you sure you want to delete user "<span id="deleteUserName"></span>"?</p>
+            <p>This action cannot be undone.</p>
+            <div class="dialog-buttons">
+                <form id="deleteUserForm" method="post" action="/delete_user/">
+                    {% csrf_token %}
+                    <input type="hidden" id="deleteUserId" name="user_id">
+                    <button type="button" class="button" onclick="cancelDeleteUser()">Cancel</button>
+                    <button type="submit" class="button delete">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation dialog for course deletion -->
+    <div class="confirmation-dialog" id="deleteCourseConfirmation">
+        <div class="dialog-content">
+            <h3>Confirm Course Deletion</h3>
+            <p>Are you sure you want to delete course "<span id="deleteCourseName"></span>"?</p>
+            <p>This action cannot be undone.</p>
+            <div class="dialog-buttons">
+                <form id="deleteCourseForm" method="post" action="/delete_course/">
+                    {% csrf_token %}
+                    <input type="hidden" id="deleteCourseId" name="course_id">
+                    <button type="button" class="button" onclick="cancelDeleteCourse()">Cancel</button>
+                    <button type="submit" class="button delete">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation dialog for quiz deletion -->
+    <div class="confirmation-dialog" id="deleteQuizConfirmation">
+        <div class="dialog-content">
+            <h3>Confirm Quiz Deletion</h3>
+            <p>Are you sure you want to delete quiz "<span id="deleteQuizName"></span>"?</p>
+            <p>This action cannot be undone.</p>
+            <div class="dialog-buttons">
+                <form id="deleteQuizForm" method="post" action="/delete_quiz/">
+                    {% csrf_token %}
+                    <input type="hidden" id="deleteQuizId" name="quiz_id">
+                    <button type="button" class="button" onclick="cancelDeleteQuiz()">Cancel</button>
+                    <button type="submit" class="button delete">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // User deletion
+        function confirmDeleteUser(userId, userName) {
+            document.getElementById('deleteUserId').value = userId;
+            document.getElementById('deleteUserName').textContent = userName;
+            document.getElementById('deleteUserConfirmation').style.display = 'flex';
+        }
+        function cancelDeleteUser() {
+            document.getElementById('deleteUserConfirmation').style.display = 'none';
+        }
+
+        // Course deletion
+        function confirmDeleteCourse(courseId, courseName) {
+            document.getElementById('deleteCourseId').value = courseId;
+            document.getElementById('deleteCourseName').textContent = courseName;
+            document.getElementById('deleteCourseConfirmation').style.display = 'flex';
+        }
+        function cancelDeleteCourse() {
+            document.getElementById('deleteCourseConfirmation').style.display = 'none';
+        }
+
+        // Quiz deletion
+        function confirmDeleteQuiz(quizId, quizName) {
+            document.getElementById('deleteQuizId').value = quizId;
+            document.getElementById('deleteQuizName').textContent = quizName;
+            document.getElementById('deleteQuizConfirmation').style.display = 'flex';
+        }
+        function cancelDeleteQuiz() {
+            document.getElementById('deleteQuizConfirmation').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
