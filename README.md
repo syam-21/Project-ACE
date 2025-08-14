@@ -1,18 +1,17 @@
-# Project A.C.E – Analyze. Connect. Execute
+Project A.C.E – Analyze. Connect. Execute
 
-**Course: Database Management System Lab  
-**Developed by:MD. Abdullah Khan_Team: HALUM (LEADER)
-**GitHub: https://github.com/syam-21/Project-ACE
+Course: Database Management System Lab  
+Developed by:MD. Abdullah Khan (Team: HALUM (LEADER))
+
 
 ---
-
-## Project Overview
+Project Overview
 Project A.C.E is a full-stack DBMS course project that demonstrates database design, data management, and web application integration.  
-It aims to **analyze**, **connect**, and **execute** data operations efficiently through a user-friendly interface.
+It aims to analyze, connect, and execute data operations efficiently through a user-friendly interface.
 
 ---
 
-## Features
+Features
 - Fully functional relational database system
 - CRUD operations (Create, Read, Update, Delete)
 - User-friendly web interface
@@ -22,10 +21,10 @@ It aims to **analyze**, **connect**, and **execute** data operations efficiently
 
 ---
 
-## Technologies Used
-- **Backend:** Django (Python)
-- **Frontend:** HTML, CSS
-- **Database:** MySQL / SQLite
-- **IDE:** PyCharm
-- **Version Control:** Git & GitHub
+Technologies Used
+- Backend: Django (Python)
+- Frontend: HTML, CSS
+- Database: MySQL / SQLite
+- IDE: PyCharm
+- Version Control: Git & GitHub
 
